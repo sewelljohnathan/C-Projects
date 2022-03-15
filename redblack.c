@@ -201,6 +201,8 @@ void add(rbTree* tree, int value) {
 
     if (current == NULL) {
         tree->root = new_node;
+        new_node->color = 0;
+        return;
     }
 
     // Loop for recursive placement locating
