@@ -9,3 +9,14 @@ typedef struct Node {
 
 } Node;
 
+
+int main() {
+
+    Node* root = malloc(sizeof(Node));
+    root->color = 0;
+    root->parent = NULL;
+    root->left = NULL;
+    root->right = NULL;
+
+    return 0;
+}
