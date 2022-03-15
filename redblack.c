@@ -17,6 +17,8 @@ typedef struct rbTree {
 
 void add(rbTree* tree, int value);
 void rebalance(Node* current);
+void printTree(rbTree* tree);
+void printNode(Node* current);
 
 int main() {
 
@@ -28,6 +30,30 @@ int main() {
 typedef enum imbalance {
     LL = 1, RR, LR, RL
 } imbalance;
+
+void printNode(Node* current) {
+
+    Node* childL = current->left;
+    Node* childR = current->right;
+    int value = current->value;
+
+    printf("%d", value);
+
+    if (childL != NULL) {
+        printNode(childL);
+    }
+    if (childR != NULL) {
+        printNode(childR);
+    }
+}
+
+void printTree(rbTree* tree) {
+
+
+    printf("RB Tree");
+    printNode(tree->root);
+    printf("\n");
+}
 
 void rebalance(Node* current) {
 
