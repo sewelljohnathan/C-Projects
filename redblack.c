@@ -11,6 +11,10 @@ typedef struct Node {
 
 } Node;
 
+typedef struct rbTree {
+    Node* root;
+} rbTree;
+
 void add(Node* root, int value);
 void rebalance(Node* current);
 
