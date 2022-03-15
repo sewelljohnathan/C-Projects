@@ -49,7 +49,6 @@ void printNode(Node* current) {
 
 void printTree(rbTree* tree) {
 
-
     printf("RB Tree");
     printNode(tree->root);
     printf("\n");
@@ -196,6 +195,13 @@ void rebalance(Node* current) {
 void add(rbTree* tree, int value) {
 
     Node* current = tree->root;
+    Node* new_node = calloc(1, sizeof(Node));
+    new_node->value = value;
+    new_node->color = 1;
+
+    if (current == NULL) {
+        tree->root = new_node;
+    }
 
     // Loop for recursive placement locating
     while (1) {
@@ -207,11 +213,8 @@ void add(rbTree* tree, int value) {
             if (current->left == NULL) {
                 
                 // Create the new left child
-                Node* new_left = calloc(1, sizeof(Node));
-                new_left->value = value;
-                new_left->color = 1;
-                new_left->parent = current;
-                current->left = new_left;
+                new_node->parent = current;
+                current->left = new_node;
                 break;
             
             // The left child exists
@@ -226,11 +229,8 @@ void add(rbTree* tree, int value) {
             if (current->right == NULL) {
                 
                 // Create the new right child
-                Node* new_right = calloc(1, sizeof(Node));
-                new_right->value = value;
-                new_right->color = 1;
-                new_right->parent = current;
-                current->right = new_right;
+                new_node->parent = current;
+                current->right = new_node;
                 break;
 
             // The right child exists
