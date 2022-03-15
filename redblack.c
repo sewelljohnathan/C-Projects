@@ -37,7 +37,7 @@ void printNode(Node* current) {
     Node* childR = current->right;
     int value = current->value;
 
-    printf("%d", value);
+    printf("%d ", value);
 
     if (childL != NULL) {
         printNode(childL);
@@ -49,7 +49,7 @@ void printNode(Node* current) {
 
 void printTree(rbTree* tree) {
 
-    printf("RB Tree");
+    printf("RB Tree\n");
     printNode(tree->root);
     printf("\n");
 }
