@@ -16,7 +16,7 @@ void rebalance(Node* current);
 
 int main() {
 
-    Node* root = malloc(sizeof(Node));
+    Node* root = calloc(1, sizeof(Node));
     root->color = 0;
 
     return 0;
@@ -178,7 +178,7 @@ void add(Node* root, int value) {
             if (root->left == NULL) {
                 
                 // Create the new left child
-                Node* new_left = malloc(sizeof(Node));
+                Node* new_left = calloc(1, sizeof(Node));
                 new_left->value = value;
                 new_left->color = 1;
                 new_left->parent = root;
@@ -197,7 +197,7 @@ void add(Node* root, int value) {
             if (root->right == NULL) {
                 
                 // Create the new right child
-                Node* new_right = malloc(sizeof(Node));
+                Node* new_right = calloc(1, sizeof(Node));
                 new_right->value = value;
                 new_right->color = 1;
                 new_right->parent = root;
