@@ -25,6 +25,7 @@ void add(Node* root, int value) {
 
     Node* current = root;
 
+    // Loop for recursive placement locating
     while (1) {
 
         // Check if the value is to the left
