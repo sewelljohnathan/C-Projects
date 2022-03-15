@@ -15,13 +15,12 @@ typedef struct rbTree {
     Node* root;
 } rbTree;
 
-void add(Node* root, int value);
+void add(rbTree* tree, int value);
 void rebalance(Node* current);
 
 int main() {
 
-    Node* root = calloc(1, sizeof(Node));
-    root->color = 0;
+    rbTree* tree = calloc(1, sizeof(rbTree));
 
     return 0;
 }
@@ -168,49 +167,49 @@ void rebalance(Node* current) {
 
 }
 
-void add(Node* root, int value) {
+void add(rbTree* tree, int value) {
 
-    Node* current = root;
+    Node* current = tree->root;
 
     // Loop for recursive placement locating
     while (1) {
 
         // Check if the value is to the left
-        if (value < root->value) {
+        if (value < current->value) {
 
             // The left child doesn't exist
-            if (root->left == NULL) {
+            if (current->left == NULL) {
                 
                 // Create the new left child
                 Node* new_left = calloc(1, sizeof(Node));
                 new_left->value = value;
                 new_left->color = 1;
-                new_left->parent = root;
-                root->left = new_left;
+                new_left->parent = current;
+                current->left = new_left;
                 break;
             
             // The left child exists
             } else {
-                current = root->left;
+                current = current->left;
             }
 
         // The value is on the right
         } else {
 
             // The right child doesn't exist
-            if (root->right == NULL) {
+            if (current->right == NULL) {
                 
                 // Create the new right child
                 Node* new_right = calloc(1, sizeof(Node));
                 new_right->value = value;
                 new_right->color = 1;
-                new_right->parent = root;
-                root->right = new_right;
+                new_right->parent = current;
+                current->right = new_right;
                 break;
 
             // The right child exists
             } else {
-                current = root->right;
+                current = current->right;
             }
 
         }
