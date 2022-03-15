@@ -39,6 +39,7 @@ void add(Node* root, int value) {
                 new_left->color = 1;
                 new_left->parent = root;
                 root->left = new_left;
+                break;
             
             // The left child exists
             } else {
@@ -57,6 +58,7 @@ void add(Node* root, int value) {
                 new_right->color = 1;
                 new_right->parent = root;
                 root->right = new_right;
+                break;
 
             // The right child exists
             } else {
