@@ -4,9 +4,9 @@ typedef struct Node {
 
     int value;
     int color; // Black = 0, Red = 1
-    Node* parent;
-    Node* left;
-    Node* right;
+    struct Node* parent;
+    struct Node* left;
+    struct Node* right;
 
 } Node;
 
