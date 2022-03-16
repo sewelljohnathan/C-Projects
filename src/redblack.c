@@ -2,10 +2,10 @@
 This program creates and prints a Red-Black Tree.
 */
 
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <math.h>
 #include "redblack.h"
 
 // Main method
