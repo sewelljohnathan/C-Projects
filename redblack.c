@@ -1,3 +1,7 @@
+/*
+This program creates and prints a Red-Black Tree.
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
