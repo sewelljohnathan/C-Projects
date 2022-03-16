@@ -26,6 +26,9 @@ void prepPrint(Node* current, int depth, int maxDepth, int** array);
 int main() {
 
     rbTree* tree = calloc(1, sizeof(rbTree));
+    addPrint(tree, 50);
+    addPrint(tree, 25);
+    addPrint(tree, 75);
 
     return 0;
 }
