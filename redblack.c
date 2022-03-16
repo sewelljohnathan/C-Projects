@@ -18,21 +18,38 @@ typedef struct Node {
 } Node;
 
 typedef struct rbTree {
+
     int numNodes;
     Node* root;
+
 } rbTree;
 
+typedef enum imbalance {
+    LL = 1, RR, LR, RL
+
+} imbalance;
+
+
+// Combines the add and printTree methods into one
 void addPrint(rbTree* tree, int value);
+// Adds a new node to the tree based on a value
 void add(rbTree* tree, int value);
+// Rebalances the tree to ensure is satisfies red-black rules
 void rebalance(Node* current, rbTree* tree);
+// Print the tree
 void printTree(rbTree* tree);
+// A helper method for printTree that organizes node values by row
 void prepPrint(Node* current, int depth, int maxDepth, int** array);
+// Converts a string to an int
 int toInt(char* num);
 
+// Main method
 int main(int argc, char **argv) {
 
+    // Initialize the R-B Tree
     rbTree* tree = calloc(1, sizeof(rbTree));
 
+    // Add all command-line inputs to the tree.
     for (int i = 1; i < argc; i++) {
         addPrint(tree, toInt(argv[i]));
     }
@@ -40,67 +57,79 @@ int main(int argc, char **argv) {
     return 0;
 }
 
-typedef enum imbalance {
-    LL = 1, RR, LR, RL
-} imbalance;
-
 void prepPrint(Node* current, int depth, int maxDepth, int** array) {
     
+    // Stop from accessing an array index greater than what is allocated
     if (depth == maxDepth) {
         return;
     }
 
+    // Get the index at which to insert new values
     int index = ++array[depth][0];
+
+    // If the current Node is NULL, do nothing
     if (current == NULL) {
         return;
     }
 
+    // Get child Nodes
     Node* childL = current->left;
     Node* childR = current->right;
+
+    // Get the current Node's value. Multiple by -1 to indicate red
     int value = current->value;
     if (current->color == 1) { value *= -1; }
     array[depth][index] = value;
     
+    // Recursively call on the two children
     prepPrint(childL, depth+1, maxDepth, array);
     prepPrint(childR, depth+1, maxDepth, array);
 }
 
 void printTree(rbTree* tree) {
 
+    // Get the height of the tree
     int treeHeight = (int) (2 * (log(tree->numNodes + 1) / log(2)));
 
-    // Initialize the array
+    // Create the array to store rows of node values
     int** array = calloc(treeHeight, sizeof(int*));
     for (int i = 0; i < treeHeight; i++) {
 
+        // Create the row
         int arrayRowLength = (int) pow(2, treeHeight-1)+1;
         array[i] = calloc(arrayRowLength, sizeof(int));
 
+        // Initialize the row with 1000
         for (int j = 1; j < arrayRowLength; j++) {
             array[i][j] = 1000;
         }
     }
     
+    // Populate the array
     prepPrint(tree->root, 0, treeHeight, array);
     
+    // Loop through all rows in the array
     printf("RB Tree\n");
     for (int i = 0; i < treeHeight; i++) {
 
+        // Loop through all nodes in the row
         int nodesOnRow = (int) pow(2, i);
         for (int j = 0; j < nodesOnRow; j++) {
 
+            // Determine how much padding to use
             int padding;
-
             if (j == 0) {
                 padding = (int) pow(2, treeHeight - i) - 2;
             } else {
                 padding = (int) pow(2, treeHeight - i + 1) - 3;
             }
 
+            // Print the padding
             for (int k = 0; k < padding; k++) {
                 printf(" ");
             }
 
+            // Print the node value
             int value = array[i][j+1];
             if (value == 1000) {
                 printf("___");
@@ -108,9 +137,9 @@ void printTree(rbTree* tree) {
                 printf("%3d", array[i][j+1]);
             }
             
-            
         }
 
+        // Newline to end the row
         printf("\n");
     }
 
@@ -181,6 +210,8 @@ void rebalance(Node* current, rbTree* tree) {
         return rebalance(grandfather, tree);
     }
 
+    // Not a lot to say here despite it being a lot of lines
+    // These are just the rules for rotating the tree for the different imbalances
     if (imbal == LL) {
 
         sibling->parent = grandfather;
@@ -237,6 +268,7 @@ void rebalance(Node* current, rbTree* tree) {
             tree->root = parent;
         }
 
+        // Recoloring
         parent->color = 0;
     }
     
@@ -251,24 +283,31 @@ void rebalance(Node* current, rbTree* tree) {
             tree->root = current;
         }
 
+        // Recoloring
         current->color = 0;
     }
 
+    // Recoloring
     grandfather->color = 1;
     tree->root->color = 0;
+
+    // Recursively call on the grandfather
     rebalance(grandfather, tree);
 
 }
 
 void add(rbTree* tree, int value) {
 
+    // Start at the root
     tree->numNodes++;
-
     Node* current = tree->root;
+
+    // Create the new node
     Node* new_node = calloc(1, sizeof(Node));
     new_node->value = value;
     new_node->color = 1;
 
+    // The tree is empty, so make this node the root
     if (current == NULL) {
         tree->root = new_node;
         new_node->color = 0;
@@ -314,12 +353,14 @@ void add(rbTree* tree, int value) {
 
     }
 
+    // Make sure the tree is balanced
     rebalance(new_node, tree);
 
 }
 
 void addPrint(rbTree* tree, int value) {
 
+    // Adds node and prints tree
     add(tree, value);
     printTree(tree);
 }
