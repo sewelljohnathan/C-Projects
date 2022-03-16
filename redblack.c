@@ -18,7 +18,7 @@ typedef struct rbTree {
 } rbTree;
 
 void add(rbTree* tree, int value);
-void rebalance(Node* current);
+void rebalance(Node* current, rbTree* tree);
 void printTree(rbTree* tree);
 void prepPrint(Node* current, int depth, int maxDepth, int** array);
 
@@ -47,7 +47,7 @@ void prepPrint(Node* current, int depth, int maxDepth, int** array) {
     Node* childL = current->left;
     Node* childR = current->right;
     int value = current->value;
-    
+    if (current->color == 1) { value *= -1; }
     array[depth][index] = value;
     
     prepPrint(childL, depth+1, maxDepth, array);
@@ -57,7 +57,6 @@ void prepPrint(Node* current, int depth, int maxDepth, int** array) {
 void printTree(rbTree* tree) {
 
     int treeHeight = (int) (2 * (log(tree->numNodes + 1) / log(2)));
-    int baseWidth = (int) pow(2, treeHeight+1); printf("%d", treeHeight);
 
     // Initialize the array
     int** array = calloc(treeHeight, sizeof(int*));
@@ -67,7 +66,7 @@ void printTree(rbTree* tree) {
         array[i] = calloc(arrayRowLength, sizeof(int));
 
         for (int j = 1; j < arrayRowLength; j++) {
-            array[i][j] = -1;
+            array[i][j] = 1000;
         }
     }
     
@@ -92,10 +91,10 @@ void printTree(rbTree* tree) {
             }
 
             int value = array[i][j+1];
-            if (value < 0) {
+            if (value == 1000) {
                 printf("___");
             } else {
-                printf("%03d", array[i][j+1]);
+                printf("%3d", array[i][j+1]);
             }
             
             
@@ -106,7 +105,7 @@ void printTree(rbTree* tree) {
 
 }
 
-void rebalance(Node* current) {
+void rebalance(Node* current, rbTree* tree) {
 
     // Relevant Nodes
     Node* childL = current->left;
@@ -133,7 +132,7 @@ void rebalance(Node* current) {
     greatGrandfather = grandfather->parent;
 
     // Find which child grandfather is
-    if (grandfather->value < greatGrandfather->value) {
+    if (greatGrandfather != NULL && grandfather->value < greatGrandfather->value) {
         ggIsLeft = 1;
     }
     
@@ -167,7 +166,8 @@ void rebalance(Node* current) {
         uncle->color = 0;
         parent->color = 0;
         grandfather->color = 1;
-        return rebalance(grandfather);
+        tree->root->color = 0;
+        return rebalance(grandfather, tree);
     }
 
     if (imbal == LL) {
@@ -222,6 +222,8 @@ void rebalance(Node* current) {
             } else {
                 greatGrandfather->right = parent;
             }
+        } else {
+            tree->root = parent;
         }
 
         parent->color = 0;
@@ -234,13 +236,16 @@ void rebalance(Node* current) {
             } else {
                 greatGrandfather->right = current;
             }
+        } else {
+            tree->root = current;
         }
 
         current->color = 0;
     }
 
     grandfather->color = 1;
-    rebalance(grandfather);
+    tree->root->color = 0;
+    rebalance(grandfather, tree);
 
 }
 
@@ -298,6 +303,6 @@ void add(rbTree* tree, int value) {
 
     }
 
-    rebalance(new_node);
+    rebalance(new_node, tree);
 
 }
