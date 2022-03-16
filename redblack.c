@@ -17,6 +17,7 @@ typedef struct rbTree {
     Node* root;
 } rbTree;
 
+void addPrint(rbTree* tree, int value);
 void add(rbTree* tree, int value);
 void rebalance(Node* current, rbTree* tree);
 void printTree(rbTree* tree);
@@ -305,4 +306,10 @@ void add(rbTree* tree, int value) {
 
     rebalance(new_node, tree);
 
+}
+
+void addPrint(rbTree* tree, int value) {
+
+    add(tree, value);
+    printTree(tree);
 }
