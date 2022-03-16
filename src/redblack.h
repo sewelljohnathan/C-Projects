@@ -23,20 +23,20 @@ typedef enum imbalance {
 
 } imbalance;
 
-// Combines the add and printTree methods into one
-void addPrint(rbTree* tree, int value);
-
 // Adds a new node to the tree based on a value
 void add(rbTree* tree, int value);
 
-// Rebalances the tree to ensure is satisfies red-black rules
-void rebalance(Node* current, rbTree* tree);
+// Combines the add and printTree methods into one
+void addPrint(rbTree* tree, int value);
+
+// A helper method for printTree that organizes node values by row
+void prepPrint(Node* current, int depth, int maxDepth, int** array);
 
 // Print the tree
 void printTree(rbTree* tree);
 
-// A helper method for printTree that organizes node values by row
-void prepPrint(Node* current, int depth, int maxDepth, int** array);
+// Rebalances the tree to ensure is satisfies red-black rules
+void rebalance(Node* current, rbTree* tree);
 
 // Converts a string to an int
 int toInt(char* num);

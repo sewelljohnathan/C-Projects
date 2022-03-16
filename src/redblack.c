@@ -22,6 +22,75 @@ int main(int argc, char **argv) {
     return 0;
 }
 
+void add(rbTree* tree, int value) {
+
+    // Start at the root
+    tree->numNodes++;
+    Node* current = tree->root;
+
+    // Create the new node
+    Node* new_node = calloc(1, sizeof(Node));
+    new_node->value = value;
+    new_node->color = 1;
+
+    // The tree is empty, so make this node the root
+    if (current == NULL) {
+        tree->root = new_node;
+        new_node->color = 0;
+        return;
+    }
+
+    // Loop for recursive placement locating
+    while (1) {
+
+        // Check if the value is to the left
+        if (value < current->value) {
+
+            // The left child doesn't exist
+            if (current->left == NULL) {
+                
+                // Create the new left child
+                new_node->parent = current;
+                current->left = new_node;
+                break;
+            
+            // The left child exists
+            } else {
+                current = current->left;
+            }
+
+        // The value is on the right
+        } else {
+
+            // The right child doesn't exist
+            if (current->right == NULL) {
+                
+                // Create the new right child
+                new_node->parent = current;
+                current->right = new_node;
+                break;
+
+            // The right child exists
+            } else {
+                current = current->right;
+            }
+
+        }
+
+    }
+
+    // Make sure the tree is balanced
+    rebalance(new_node, tree);
+
+}
+
+void addPrint(rbTree* tree, int value) {
+
+    // Adds node and prints tree
+    add(tree, value);
+    printTree(tree);
+}
+
 void prepPrint(Node* current, int depth, int maxDepth, int** array) {
     
     // Stop from accessing an array index greater than what is allocated
@@ -259,75 +328,6 @@ void rebalance(Node* current, rbTree* tree) {
     // Recursively call on the grandfather
     rebalance(grandfather, tree);
 
-}
-
-void add(rbTree* tree, int value) {
-
-    // Start at the root
-    tree->numNodes++;
-    Node* current = tree->root;
-
-    // Create the new node
-    Node* new_node = calloc(1, sizeof(Node));
-    new_node->value = value;
-    new_node->color = 1;
-
-    // The tree is empty, so make this node the root
-    if (current == NULL) {
-        tree->root = new_node;
-        new_node->color = 0;
-        return;
-    }
-
-    // Loop for recursive placement locating
-    while (1) {
-
-        // Check if the value is to the left
-        if (value < current->value) {
-
-            // The left child doesn't exist
-            if (current->left == NULL) {
-                
-                // Create the new left child
-                new_node->parent = current;
-                current->left = new_node;
-                break;
-            
-            // The left child exists
-            } else {
-                current = current->left;
-            }
-
-        // The value is on the right
-        } else {
-
-            // The right child doesn't exist
-            if (current->right == NULL) {
-                
-                // Create the new right child
-                new_node->parent = current;
-                current->right = new_node;
-                break;
-
-            // The right child exists
-            } else {
-                current = current->right;
-            }
-
-        }
-
-    }
-
-    // Make sure the tree is balanced
-    rebalance(new_node, tree);
-
-}
-
-void addPrint(rbTree* tree, int value) {
-
-    // Adds node and prints tree
-    add(tree, value);
-    printTree(tree);
 }
 
 int toInt(char* num) {
