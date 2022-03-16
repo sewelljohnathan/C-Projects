@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 
 typedef struct Node {
 
@@ -12,13 +13,14 @@ typedef struct Node {
 } Node;
 
 typedef struct rbTree {
+    int numNodes;
     Node* root;
 } rbTree;
 
 void add(rbTree* tree, int value);
 void rebalance(Node* current);
 void printTree(rbTree* tree);
-void printNode(Node* current);
+void prepPrint(Node* current, int depth, int maxDepth, int** array);
 
 int main() {
 
@@ -31,27 +33,77 @@ typedef enum imbalance {
     LL = 1, RR, LR, RL
 } imbalance;
 
-void printNode(Node* current) {
+void prepPrint(Node* current, int depth, int maxDepth, int** array) {
+    
+    if (depth == maxDepth) {
+        return;
+    }
+
+    int index = ++array[depth][0];
+    if (current == NULL) {
+        return;
+    }
 
     Node* childL = current->left;
     Node* childR = current->right;
     int value = current->value;
-
-    printf("%d ", value);
-
-    if (childL != NULL) {
-        printNode(childL);
-    }
-    if (childR != NULL) {
-        printNode(childR);
-    }
+    
+    array[depth][index] = value;
+    
+    prepPrint(childL, depth+1, maxDepth, array);
+    prepPrint(childR, depth+1, maxDepth, array);
 }
 
 void printTree(rbTree* tree) {
 
+    int treeHeight = (int) (2 * (log(tree->numNodes + 1) / log(2)));
+    int baseWidth = (int) pow(2, treeHeight+1); printf("%d", treeHeight);
+
+    // Initialize the array
+    int** array = calloc(treeHeight, sizeof(int*));
+    for (int i = 0; i < treeHeight; i++) {
+
+        int arrayRowLength = (int) pow(2, treeHeight-1)+1;
+        array[i] = calloc(arrayRowLength, sizeof(int));
+
+        for (int j = 1; j < arrayRowLength; j++) {
+            array[i][j] = -1;
+        }
+    }
+    
+    prepPrint(tree->root, 0, treeHeight, array);
+    
     printf("RB Tree\n");
-    printNode(tree->root);
-    printf("\n");
+    for (int i = 0; i < treeHeight; i++) {
+
+        int nodesOnRow = (int) pow(2, i);
+        for (int j = 0; j < nodesOnRow; j++) {
+
+            int padding;
+
+            if (j == 0) {
+                padding = (int) pow(2, treeHeight - i) - 2;
+            } else {
+                padding = (int) pow(2, treeHeight - i + 1) - 3;
+            }
+
+            for (int k = 0; k < padding; k++) {
+                printf(" ");
+            }
+
+            int value = array[i][j+1];
+            if (value < 0) {
+                printf("___");
+            } else {
+                printf("%03d", array[i][j+1]);
+            }
+            
+            
+        }
+
+        printf("\n");
+    }
+
 }
 
 void rebalance(Node* current) {
@@ -193,6 +245,8 @@ void rebalance(Node* current) {
 }
 
 void add(rbTree* tree, int value) {
+
+    tree->numNodes++;
 
     Node* current = tree->root;
     Node* new_node = calloc(1, sizeof(Node));
