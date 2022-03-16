@@ -298,4 +298,6 @@ void add(rbTree* tree, int value) {
 
     }
 
+    rebalance(new_node);
+
 }
