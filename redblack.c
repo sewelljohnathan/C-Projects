@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <math.h>
 
 typedef struct Node {
@@ -22,13 +23,15 @@ void add(rbTree* tree, int value);
 void rebalance(Node* current, rbTree* tree);
 void printTree(rbTree* tree);
 void prepPrint(Node* current, int depth, int maxDepth, int** array);
+int toInt(char* num);
 
-int main() {
+int main(int argc, char **argv) {
 
     rbTree* tree = calloc(1, sizeof(rbTree));
-    addPrint(tree, 50);
-    addPrint(tree, 25);
-    addPrint(tree, 75);
+
+    for (int i = 1; i < argc; i++) {
+        addPrint(tree, toInt(argv[i]));
+    }
 
     return 0;
 }
@@ -315,4 +318,16 @@ void addPrint(rbTree* tree, int value) {
 
     add(tree, value);
     printTree(tree);
+}
+
+int toInt(char* num) {
+    int length = strlen(num);
+    int rtn = 0;
+
+    for (int i = 0; i < length; i++) {
+        
+        rtn = rtn*10 + (num[i] - '0');
+    }
+
+    return rtn;
 }
